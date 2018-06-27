@@ -1,0 +1,39 @@
+html.no-js(lang='en')
+  head
+    title= Gráfica
+    link(rel='stylesheet', href='/stylesheets/style.css')
+    script(type='text/javascript', src='jqwery/jquery-2.1.1.min.js')
+    script(type='text/javascript', src='javascripts/calcula.js')
+    script(type='text/javascript', src='javascripts/plotly-latest.min.js') 
+    link(rel='stylesheet', href='bootstrap-3.1.1-dist/css/bootstrap.min.css')
+    meta(name='viewport', content='width=device-width, initial-scale=1')
+    style.
+      .zelda {
+        color: white;
+        border-radius: 1em;
+        padding: 1em;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin-right: -50%;
+        transform: translate(-50%, -50%); }
+      #regresar{
+        display: block;
+        width: 260px;
+        height: 80px;
+        background: url('./images/Regresar.png') no-repeat top;
+        transition: all 0.3s ease 0s;
+      }
+      #regresar:hover{
+        background: url('./images/Regresar2.png') no-repeat bottom;
+        transition: all 0.2s ease 0s;
+      }
+  body(onload='valida()',style='background: url("./images/error-404.png") no-repeat center center fixed;-webkit-background-size: cover;background-size: cover;')
+    .zelda 
+        center
+          if(message=='Ingresó valores mayores a 1e9 o menores a -1e9, intente de nuevo')  
+            h1= message
+          else
+            h1= message
+            h2= error.status
+          a#regresar(href='/composicion')

@@ -1,0 +1,351 @@
+doctype html
+html.no-js(lang='en')
+  head
+    meta(charset='UTF-8')
+    meta(http-equiv='X-UA-Compatible', content='IE=edge')
+    meta(name='viewport', content='width=device-width, initial-scale=1')
+    title Ec. Dif. Homogenea
+    meta(name='description', content='Minimal Form Interface: Simplistic, single input view form')
+    meta(name='keywords', content='form, minimal, interface, single input, big form, responsive form, transition')
+    meta(name='author', content='Codrops')
+    link(rel='shortcut icon', href='../favicon.ico')
+    link(rel='stylesheet', type='text/css', href='css/normalize.css')
+    link(rel='stylesheet', type='text/css', href='css/demo.css')
+    link(rel='stylesheet', type='text/css', href='css/component.css')
+    script(src='js/modernizr.custom.js')
+  body
+    .container
+      header.codrops-header
+        h1
+          span Universidad Francisco de Paula Santander
+          | Ecuación Diferencial Homogénea
+          span Yeison Osorio, Carlos Manotas, Jhofran Moreno
+        h2 AY'' + BY' + CY = 0
+      section
+        form#theForm.simform(autocomplete='off')
+          .simform-inner
+            ol.questions
+              input#y1(type='hidden', name='y1')
+              input#y2(type='hidden', name='y2')
+              input#val(type='hidden', name='val')
+              input#comp(type='hidden', name='comp')
+              li
+                span
+                  label(for='de') Ingrese el coeficiente de Y'':
+                input#de(name='de', type='number')
+              li
+                span
+                  label(for='b') Ingrese el coeficiente de Y':
+                input#b(name='b', type='number')
+              li
+                span
+                  label(for='c') Ingrese el coeficiente de Y:
+                input#c(name='c', type='number', onfocusout='raices();carac();comprueba()')
+              li
+                span
+                  label(for='q4') Paso 1: Ecuación Característica
+                input#q4(name='q4', type='text', onfocusout='raicesx2()', readonly='')
+              li
+                span
+                  label(for='q5') Paso 2: Raíces
+                input#q5(name='q5', type='text', onfocusout='li()', readonly='')
+              li
+                span
+                  label(for='q6') Paso 3: Soluciones linealmente independientes
+                input#q6(name='q6', type='text', readonly='')
+            // /questions
+            button.submit(type='submit') Send answers
+            .controls
+              button.next
+              .progress
+              span.number
+                span.number-current
+                span.number-total
+              span.error-message
+            // / controls
+          // /simform-inner
+          span.final-message
+        // /simform
+    // /container
+    script(src='js/classie.js')
+    script(src='js/stepsForm.js')
+    script.
+      function comprueba(){
+      var hola =parseFloat(document.getElementById("de").value);
+      var b =parseFloat(document.getElementById("b").value);
+      var divi=b/hola;
+      if(divi<0.001 && divi>-0.001 && divi!==0){
+      alert("Esta usando valores muy extremos, por lo tanto se usaran aproximaciones");
+      document.getElementById("comp").value=1;
+      }
+      else
+      document.getElementById("comp").value=0;
+      }
+      function raices(){
+      var uno,dos;
+      var raiz1=0,raiz2=0;
+      var valida=0;
+      var hola =parseFloat(document.getElementById("de").value);
+      var b =parseFloat(document.getElementById("b").value);
+      var c =parseFloat(document.getElementById("c").value);
+      if(a=NaN || b==NaN || c==NaN)
+      alert('Verifique sus valores: \\n A='+a+'\n B ='+b+'\n C='+c);
+      if(a.length==0 || b.length==0 || c.length==0)
+      alert('Alguno de sus valores esta vacio');
+      else{
+      if(hola==0 && b!=0 && c!=0){
+      raiz1 = (-1*c)/b;
+      }
+      if(hola==0 && b==0 && c==0)
+        valida=-1;
+      else{
+      if(hola!=0 && b==0 && (c!=0 || c==0) ){
+      if(c>0){
+      valida=2;
+      raiz1=0;
+      raiz2=(Math.sqrt(c))/hola;
+      }
+      else{
+      c*=-1;
+      valida=1;
+      raiz1=(Math.sqrt(c))/hola;
+      raiz2=(-1)*(Math.sqrt(c))/hola;
+      }
+      }
+      if(hola!=0 && b!=0 && (c!=0 || c==0) ){
+      if( (4*hola*c)<=(b*b)){
+      valida=1
+      raiz1= (-b+Math.sqrt((b*b)-(4*hola*c)))/(2*hola);
+      raiz2= (-b-Math.sqrt((b*b)-(4*hola*c)))/(2*hola);
+      }
+      else{
+      raiz1= (-b)/(2*hola);
+      raiz2= Math.sqrt((-1)*((b*b)-(4*hola*c)))/(2*hola);
+      valida=2;
+      }
+      }
+      }
+      }
+      document.getElementById("y1").value=raiz1.toFixed(3);
+      document.getElementById("y2").value=raiz2.toFixed(3);
+      document.getElementById("val").value=valida;
+      }
+      var theForm = document.getElementById( 'theForm' );
+      function carac(){
+      var uno1=document.getElementById("de").value;
+      var dos1=parseFloat(document.getElementById("b").value);
+      var tres1=parseFloat(document.getElementById("c").value);
+      var val=parseInt(document.getElementById("val").value);
+      var comp=parseInt(document.getElementById("comp").value);
+      var cad;
+      if(val==0){
+      cad=dos1+"m ";
+      if(tres1<0)
+      cad=cad+tres1+" = 0";
+      else
+      cad=cad+"+ "+tres1+" = 0";
+      }
+      else{
+      cad=uno1+"m² ";
+      if(dos1<0)
+      cad=cad+dos1+"m ";
+      else
+      cad=cad+"+ "+dos1+"m ";
+      if(tres1<0)
+      cad=cad+tres1+" = 0";
+      else
+      cad=cad+"+ "+tres1+" = 0";
+      }
+      document.getElementById("q4").value=cad;
+      }
+      function raicesx2(){
+      var uno=parseFloat(document.getElementById("y1").value);
+      var dos=parseFloat(document.getElementById("y2").value);
+      var val=parseInt(document.getElementById("val").value);
+      var comp=parseInt(document.getElementById("comp").value);
+      var cad;
+      if(val==-1)
+        cad=" m = 0";
+      if(val==0)
+      cad=" m = "+uno;
+      if(comp==0){
+      if(val==1)
+      cad=" m₁ = "+uno+" ; m₂ = "+dos;
+      if(val==2)
+      cad=" m₁,₂ = "+uno+" ± "+dos+"i";
+      }
+      else{
+      if(val==1)
+      cad=" m₁ ≈ "+uno+" ; m₂ ≈ "+dos;
+      if(val==2)
+      cad=" m₁,₂ ≈ "+uno+" ± "+dos+"i";
+      }
+      document.getElementById("q5").value=cad;
+      }
+      function li(){
+      var uno=parseFloat(document.getElementById("y1").value);
+      var dos=parseFloat(document.getElementById("y2").value);
+      var val=parseInt(document.getElementById("val").value);
+      var comp=parseInt(document.getElementById("comp").value);
+      var cad;
+      if(val==-1)
+        cad="Y = 0";
+      if(val==0){
+      if(uno!==0)
+      cad=" Y = e^("+uno+"x)";
+      else
+      cad=" Y = 1";
+      }
+      if(val==1){
+      if(comp==0){
+      if(uno!=dos){
+      if(uno===0)
+      cad=" Y₁ = 1 ; ";
+      else
+      cad = "Y₁ = e^("+uno+"x) ; ";
+      if(dos===0)
+      cad=cad+"Y₂ = 1 ";
+      else
+      cad=cad+"Y₂ = e^("+dos+"x) ";
+      }
+      else{
+      if(uno!==0)
+      cad=" Y₁ = e^("+uno+"x) ; Y₂ = xe^("+dos+"x)";
+      else
+      cad=" Y₁ = 1 ; Y₂ = x";
+      }
+      }
+      else{
+      if(uno!=dos){
+      if(uno===0)
+      cad=" Y₁ ≈ 1 ; ";
+      else
+      cad = "Y₁ ≈ e^("+uno+"x) ; ";
+      if(dos===0)
+      cad=cad+"Y₂ ≈ 1 ";
+      else
+      cad=cad+"Y₂ ≈ e^("+dos+"x) ";
+      }
+      else{
+      if(uno!==0)
+      cad=" Y₁ ≈ e^("+uno+"x) ; Y₂ ≈ xe^("+dos+"x)";
+      else
+      cad=" Y₁ ≈ 1 ; Y₂ ≈ x";
+      }
+      }
+      }
+      if(val==2){
+      if(comp==0){
+      if(uno!==0 && dos!==0)
+      cad=" Y₁ = e^("+uno+"x) Cos("+dos+"x) ; Y₂ = e^("+uno+"x) Sen("+dos+"x) ";
+      if(uno===0 && dos!==0)
+      cad=" Y₁ = Cos("+dos+"x) ; Y₂ = Sen("+dos+"x) ";
+      if(uno!==0 && dos===0)
+      cad=" Y₁ = e^("+uno+"x) ; Y₂ = 0";
+      if(uno===0 && dos===0)
+      cad=" Y₁ = 1 ; Y₂ = 0";
+      }
+      else{
+      if(uno!==0 && dos!==0)
+      cad=" Y₁ ≈ e^("+uno+"x) Cos("+dos+"x) ; Y₂ ≈ e^("+uno+"x) Sen("+dos+"x) ";
+      if(uno===0 && dos!==0)
+      cad=" Y₁ ≈ Cos("+dos+"x) ; Y₂ ≈ Sen("+dos+"x) ";
+      if(uno!==0 && dos===0)
+      cad=" Y₁ ≈ e^("+uno+"x) ; Y₂ ≈ 0";
+      if(uno===0 && dos===0)
+      cad=" Y₁ ≈ 1 ; Y₂ ≈ 0";
+      }
+      }
+      document.getElementById("q6").value=cad;
+      }
+      new stepsForm( theForm, {
+      onSubmit : function( form ){
+      var uno=parseFloat(document.getElementById("y1").value);
+      var dos=parseFloat(document.getElementById("y2").value);
+      var val=parseInt(document.getElementById("val").value);
+      var val=parseInt(document.getElementById("val").value);
+      var comp=parseInt(document.getElementById("comp").value);
+      var cad=" ";
+      if(val==-1)
+        cad=" Yc = 0";
+      if(val==0){
+      if(uno!=0)
+      cad=cad+" Yc = Ce^("+uno+"x)";
+      else
+      cad=cad+" Yc = C";
+      }
+      if(comp==0){
+      if(val==1){
+      if(uno!=dos){
+      if(uno==0)
+      cad=cad+" Yc = C₁ + ";
+      else
+      cad =cad+ "Yc = C₁e^("+uno+"x) + ";
+      if(dos==0)
+      cad=cad+"C₂";
+      else
+      cad=cad+"C₂e^("+dos+"x) ";
+      }
+      else{
+      if(uno!=0)
+      cad=cad+" Yc = C₁e^("+uno+"x) + C₂xe^("+dos+"x)";
+      else
+      cad=cad+" Yc = C₁ + C₂x";
+      }
+      }
+      if(val==2){
+      if(uno!==0 && dos!==0)
+      cad=" Yc =  C₁ e^("+uno+"x) Cos("+dos+"x) + C₂e^("+uno+"x)Sen("+dos+"x) ";
+      if(uno===0 && dos!==0)
+      cad=" Yc = C₁ Cos("+dos+"x) + C₂Sen("+dos+"x) ";
+      if(uno!==0 && dos===0)
+      cad=" Yc =  C₁e^("+uno+"x)";
+      if(uno===0 && dos===0)
+      cad=" Yc = C₁ ";
+      }
+      }
+      else{
+      if(val==1){
+      if(uno!=dos){
+      if(uno==0)
+      cad=cad+" Yc ≈ C₁ + ";
+      else
+      cad =cad+ "Yc ≈ C₁e^("+uno+"x) + ";
+      if(dos==0)
+      cad=cad+"C₂";
+      else
+      cad=cad+"C₂e^("+dos+"x) ";
+      }
+      else{
+      if(uno!=0)
+      cad=cad+" Yc ≈ C₁e^("+uno+"x) + C₂xe^("+dos+"x)";
+      else
+      cad=cad+" Yc ≈ C₁ + C₂x";
+      }
+      }
+      if(val==2){
+      if(uno!==0 && dos!==0)
+      cad=" Yc ≈ C₁ e^("+uno+"x) Cos("+dos+"x) + C₂e^("+uno+"x)Sen("+dos+"x) ";
+      if(uno===0 && dos!==0)
+      cad=" Yc ≈ C₁ Cos("+dos+"x) + C₂Sen("+dos+"x) ";
+      if(uno!==0 && dos===0)
+      cad=" Yc ≈ C₁e^("+uno+"x)";
+      if(uno===0 && dos===0)
+      cad=" Yc ≈ C₁ ";
+      }
+      }
+      cad=cad+"<br><br><a href='/'>Volver a hacer</a>"
+     
+      // ocultar formulario
+      classie.addClass( theForm.querySelector( '.simform-inner' ), 'hide' );
+      /*
+      form.submit()
+      or
+      AJAX request (maybe show loading indicator while we don't have an answer..)
+      */
+      // Simulemos algo ...
+      var messageEl = theForm.querySelector( '.final-message' );
+      messageEl.innerHTML = cad;
+      classie.addClass( messageEl, 'show' );
+      }
+      } );
